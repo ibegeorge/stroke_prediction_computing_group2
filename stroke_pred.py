@@ -52,7 +52,9 @@ print("visualising the outliers ...")
 plt.figure(figsize=(12,6))
 df[numerical_columns].boxplot()
 plt.xticks(rotation=45)
+plt.savefig("outliers.jpeg")
 plt.show()
+
 
 print("\nchecking for if the numerical cols are highly skewed...")
 numerical_columns = ["age", "avg_glucose_level", "bmi"]
@@ -106,6 +108,7 @@ plt.xlabel("Correlation coefficient")
 plt.ylabel("Predictor")
 plt.axvline(x=0)
 plt.tight_layout()
+plt.savefig("corr_predictors_vs_stroke.jpeg")
 plt.show()
 
 # Extracting features and target
@@ -202,7 +205,7 @@ print(confusion_matrix(y_test,logistic_pred))
 
 # applying decision threshold
 threshold = 0.5
-y_threshold = (logistic_probability > threshold).astype(int)
+y_threshold = (logistic_probability >= threshold).astype(int)
 print(y_threshold)
 accuracy_score(y_test, y_threshold)
 precision_score(y_test, y_threshold)
@@ -216,8 +219,8 @@ sns.heatmap(cm, annot=True, fmt='d')
 plt.title("Logistics Confusion Metrics")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
+plt.savefig("logistics_model_confusion_matrix.jpeg")
 plt.show()
-
 #ROC-AUC 
 auc = roc_auc_score(y_test, logistic_probability)
 print(f"ROC-AUC: {auc}")
@@ -234,7 +237,9 @@ plt.plot(
 plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate")
 plt.legend()
+plt.savefig("logistic_regression_roc_curve.jpeg")
 plt.show()
+
 # Threshold analysis
 threshold_results = []
 thresholds = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50]
@@ -259,11 +264,11 @@ cm1 = confusion_matrix(y_test, y_best_pred)
 print(classification_report(y_test, y_best_pred))
 
 # Confusion matrix for the best threshold
-cm = confusion_matrix(y_test, y_best_pred)
-sns.heatmap(cm, annot=True, fmt='d')
+sns.heatmap(cm1, annot=True, fmt='d')
 plt.title("Logistics Optimal Confusion Metrics")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
+plt.savefig("optimal_logistics_model_confusion_matrix.jpeg")
 plt.show()
 
 X_sm = sm.add_constant(X_train)
@@ -346,7 +351,7 @@ print(X_mnb.columns)
 # columns with categorical features
 categorical_features = [0,2,3,4,5,6,9]
 # splitting X and y for mixed naive bayes
-X_mnb_train,X_mnb_test,y_mnb_train,y_mnb_test = train_test_split(X_mnb,y_mnb,test_size=0.2,random_state=42,stratify=y)
+X_mnb_train,X_mnb_test,y_mnb_train,y_mnb_test = train_test_split(X_mnb,y_mnb,test_size=0.2,random_state=42,stratify=y_mnb)
 
 mnb_model = MixedNB(
     categorical_features=categorical_features
@@ -370,7 +375,9 @@ sns.heatmap(mnb_cm, annot=True, fmt='d')
 plt.title("Mixed Naive Bayes Confusion Matrix")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
+plt.savefig("mnb_confusion_matrix.jpeg")
 plt.show()
+
 # Hyperprameter tunning for Mixed Naive Bayes
 
 alphas = [0.01,0.1,0.5,1,5,10]
@@ -423,6 +430,7 @@ sns.heatmap(optimal_mnb_cm, annot=True, fmt='d')
 plt.title("Optimal Mixed Naive Bayes Confusion Matrix")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
+plt.savefig("optimal_mnb_confusion_matrix.jpeg")
 plt.show()
 
 fpr, tpr, thresholds = roc_curve(
@@ -444,6 +452,7 @@ plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate")
 plt.title("ROC Curve - Mixed Naive Bayes")
 plt.legend()
+plt.savefig("roc_curve_mnb.jpeg")
 plt.show()
 
 # Threshold analysis
@@ -463,11 +472,12 @@ for threshold in mnb_thresholds:
     )
     
 print(classification_report(y_mnb_test,mnb_predictiont))    
-cm1 = confusion_matrix(y_test, mnb_predictiont)
+cm2 = confusion_matrix(y_test, mnb_predictiont)
 plt.title("Final Mixed Naive Bayes Confusion Matrix")
-sns.heatmap(cm, annot=True, fmt='d')
+sns.heatmap(cm2, annot=True, fmt='d')
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
+plt.savefig("final_mnb_confusion_matrix.jpeg")
 plt.show()
 
 # Non-Probabilistic Classification Models 
@@ -494,7 +504,9 @@ sns.heatmap(svm_cm,annot=True,fmt="d")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("SVM Confusion Matrix")
+plt.savefig("svm_confusion_matrix.jpeg")
 plt.show()
+
 # Hyperparameter tuning for SVM
 param_grid = [
     {
@@ -549,6 +561,7 @@ sns.heatmap(best_svm_cm,annot=True,fmt="d")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Optimized SVM Confusion Matrix")
+plt.savefig("optimal_svm_confusion_matrix.jpeg")
 plt.show()
 # ROC Curve
 svm_auc = roc_auc_score(y_test,best_svm_probability)
@@ -569,7 +582,9 @@ plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate")
 plt.title("ROC Curve - Optimized SVM")
 plt.legend()
+plt.savefig("roc_curve_optimised_svm")
 plt.show()
+
 # Threshold analysis
 threshold_values = [0.1,0.2,0.3,0.4,0.5]
 for threshold in threshold_values:
@@ -616,8 +631,8 @@ sns.heatmap(
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("KNN Confusion Matrix")
+plt.savefig("Knn_confusion_matrix.jpeg")
 plt.show()
-
 # Hyperparameter tuning for KNN
 param_grid = {
     "n_neighbors": [3,5,7,9,11,15,21],
@@ -698,9 +713,8 @@ sns.heatmap(
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Optimized KNN Confusion Matrix")
+plt.savefig("optimal_knn_confusion_matrix.jpeg")
 plt.show()
-
-
 
 # ROC Curve
 
@@ -727,6 +741,7 @@ plt.xlabel("False Positive Rate")
 plt.ylabel("True Positive Rate")
 plt.title("ROC Curve - Optimized KNN")
 plt.legend()
+plt.savefig("optimised_knn_roc_curve.jpeg")
 plt.show()
 
 # Threshold analysis
@@ -756,8 +771,8 @@ sns.heatmap(best_knn_cm,annot=True,fmt="d")
 plt.xlabel("Predicted")
 plt.ylabel("Actual")
 plt.title("Optimized threshold KNN Confusion Matrix")
+plt.savefig("optimal_threshold_knn_confusion_matrix.jpeg")
 plt.show()
-
 
 # Models Comparison
 model_results = []
@@ -834,7 +849,9 @@ plt.xlabel("Model")
 plt.xticks(rotation=45)
 plt.legend(bbox_to_anchor=(1.05,1))
 plt.tight_layout()
+plt.savefig("probabilistic_vs_non_probabilistic_algorithms.jpeg")
 plt.show()
+
 best_model = comparison_table.loc[
     comparison_table["ROC-AUC"].idxmax()
 ]
